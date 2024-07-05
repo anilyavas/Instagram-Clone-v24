@@ -2,17 +2,25 @@ import post from '@/assets/data/posts.json';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
-export default function Post() {
+type Post = {
+  id: String;
+  image_url: String;
+  caption: String;
+  user: {
+    id: String;
+    username: String;
+    image_url: String;
+    avatar_url: String;
+  };
+};
+export default function Post({ item }: { item: Post }) {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Image
-          source={{ uri: post[0].user.image_url }}
-          style={styles.userImage}
-        />
-        <Text style={styles.userName}>{post[0].user.username}</Text>
+        <Image source={{ uri: item.user.image_url }} style={styles.userImage} />
+        <Text style={styles.userName}>{item.user.username}</Text>
       </View>
-      <Image source={{ uri: post[0].image_url }} style={styles.postImage} />
+      <Image source={{ uri: item.image_url }} style={styles.postImage} />
       <View style={styles.buttonContainer}>
         <View style={styles.buttonSecondContainer}>
           <FontAwesome name='heart-o' size={25} color='black' />
@@ -39,7 +47,11 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
   },
-  buttonSecondContainer: { flexDirection: 'row', gap: 10, flex: 1 },
+  buttonSecondContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    flex: 1,
+  },
   userName: {
     fontSize: 20,
     fontWeight: 'bold',
