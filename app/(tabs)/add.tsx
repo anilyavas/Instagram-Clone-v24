@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text } from 'react-native';
 
-export default function HomeScreen() {
+export default function AddScreen() {
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <Text>Hello second screen</Text>
     </View>
   );
 }
