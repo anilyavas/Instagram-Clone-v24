@@ -1,40 +1,30 @@
 import { Tabs } from 'expo-router';
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        tabBarActiveTintColor: 'black',
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
         name='index'
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'home' : 'home-outline'}
-              color={color}
-            />
+          title: 'For you',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name='home' size={28} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name='add'
         options={{
-          title: 'Add',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'add-circle' : 'add-circle-outline'}
-              color={color}
-            />
+          title: 'New',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={28} name='plus-square-o' color={color} />
           ),
         }}
       />
@@ -42,11 +32,8 @@ export default function TabLayout() {
         name='profile'
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon
-              name={focused ? 'person-circle' : 'person-circle-outline'}
-              color={color}
-            />
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={28} name='user' color={color} />
           ),
         }}
       />
