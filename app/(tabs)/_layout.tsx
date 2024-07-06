@@ -22,7 +22,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='add'
         options={{
-          title: 'New',
+          title: 'Create Post',
           tabBarIcon: ({ color }) => (
             <FontAwesome size={28} name='plus-square-o' color={color} />
           ),

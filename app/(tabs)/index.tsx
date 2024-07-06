@@ -6,9 +6,10 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        contentContainerStyle={{ gap: 10 }}
+        contentContainerStyle={{ gap: 10, width: '100%' }}
         data={post}
         renderItem={({ item }) => <Post item={item} />}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
