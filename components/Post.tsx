@@ -1,4 +1,3 @@
-import post from '@/assets/data/posts.json';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, View, Text, Image } from 'react-native';
 
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
   },
   buttonSecondContainer: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 15,
     flex: 1,
   },
   userName: {
