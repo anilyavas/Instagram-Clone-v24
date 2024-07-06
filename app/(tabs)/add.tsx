@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,19 +7,46 @@ import {
   Text,
   Pressable,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function CreatePostScreen() {
   const [input, setInput] = useState('');
+  const [image, setImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!image) {
+      pickImage();
+    }
+  }, [image]);
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Image
-        source={{
-          uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/1.jpg',
-        }}
-        style={styles.image}
-      />
+      {image ? (
+        <Image
+          source={{
+            uri: image,
+          }}
+          style={styles.image}
+        />
+      ) : (
+        <View style={styles.image} />
+      )}
 
-      <Text onPress={() => {}} style={styles.buttonText}>
+      <Text onPress={pickImage} style={styles.buttonText}>
         Change
       </Text>
       <TextInput
@@ -52,6 +79,8 @@ const styles = StyleSheet.create({
     width: 200,
     aspectRatio: 3 / 4,
     borderRadius: 10,
+    backgroundColor: 'lightgrey',
+    margin: 10,
   },
   buttonText: {
     fontSize: 18,
