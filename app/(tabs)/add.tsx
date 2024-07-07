@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  TextInput,
-  Text,
-  Pressable,
-} from 'react-native';
+import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import Button from '@/components/Button';
 
 export default function CreatePostScreen() {
   const [input, setInput] = useState('');
@@ -56,9 +50,7 @@ export default function CreatePostScreen() {
         placeholder='What is on your mind'
       />
       <View style={styles.footer}>
-        <Pressable style={styles.shareButton}>
-          <Text style={styles.shareText}>Share</Text>
-        </Pressable>
+        <Button title='Share' onPress={() => {}} />
       </View>
     </View>
   );
@@ -89,18 +81,6 @@ const styles = StyleSheet.create({
   },
   input: {
     width: '100%',
-    padding: 10,
-  },
-  shareButton: {
-    width: '95%',
-    alignItems: 'center',
-    backgroundColor: '#036bfc',
-    borderRadius: 10,
-  },
-  shareText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'semibold',
     padding: 10,
   },
 });
