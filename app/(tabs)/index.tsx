@@ -8,7 +8,7 @@ export default function HomeScreen() {
       <FlatList
         contentContainerStyle={{ gap: 10, width: '100%' }}
         data={post}
-        renderItem={({ item }) => <Post item={item} />}
+        renderItem={({ item }) => <Post post={item} />}
         showsVerticalScrollIndicator={false}
       />
     </View>

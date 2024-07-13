@@ -1,8 +1,23 @@
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  useWindowDimensions,
+} from 'react-native';
+import { AdvancedImage } from 'cloudinary-react-native';
+
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
+import { focusOn } from '@cloudinary/url-gen/qualifiers/gravity';
+import { FocusOn } from '@cloudinary/url-gen/qualifiers/focusOn';
+import { byRadius } from '@cloudinary/url-gen/actions/roundCorners';
+
+import { cld } from '@/lib/cloudinary';
 
 type Post = {
   id: String;
+  image: String;
   image_url: String;
   caption: String;
   user: {
@@ -12,14 +27,25 @@ type Post = {
     avatar_url: String;
   };
 };
-export default function Post({ item }: { item: Post }) {
+
+export default function Post({ post }: { post: Post }) {
+  const { width } = useWindowDimensions();
+
+  const image = cld.image(post.image);
+  image.resize(thumbnail().width(width).height(width));
+
+  const avatar = cld.image(post.user.avatar_url);
+  avatar.resize(
+    thumbnail().width(48).height(48).gravity(focusOn(FocusOn.face()))
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Image source={{ uri: item.user.image_url }} style={styles.userImage} />
-        <Text style={styles.userName}>{item.user.username}</Text>
+        <AdvancedImage cldImg={avatar} style={styles.userImage} />
+        <Text style={styles.userName}>{post.user.username}</Text>
       </View>
-      <Image source={{ uri: item.image_url }} style={styles.postImage} />
+      <AdvancedImage cldImg={image} style={styles.advancedImg} />
       <View style={styles.buttonContainer}>
         <View style={styles.buttonSecondContainer}>
           <FontAwesome name='heart-o' size={25} color='black' />
@@ -63,5 +89,9 @@ const styles = StyleSheet.create({
   postImage: {
     width: '100%',
     aspectRatio: 1,
+  },
+  advancedImg: {
+    width: '100%',
+    aspectRatio: 4 / 3,
   },
 });
