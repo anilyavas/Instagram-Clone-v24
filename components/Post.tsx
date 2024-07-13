@@ -28,7 +28,7 @@ type Post = {
   };
 };
 
-export default function Post({ post }: { post: Post }) {
+export default function Post({ post }: { post: Post | any }) {
   const { width } = useWindowDimensions();
 
   const image = cld.image(post.image);
