@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Button from '@/components/Button';
+import { cld } from '@/lib/cloudinary';
+import { upload } from 'cloudinary-react-native';
 
 export default function CreatePostScreen() {
   const [input, setInput] = useState('');
@@ -19,12 +21,33 @@ export default function CreatePostScreen() {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.5,
     });
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
+  };
+  const uploadImage = async () => {
+    if (!image) {
+      return;
+    } else {
+      const options = {
+        upload_preset: 'Default',
+        unsigned: true,
+      };
+      await upload(cld, {
+        file: image,
+        options: options,
+        callback: (error: any, response: any) => {
+          console.log(error);
+          console.log(response);
+        },
+      });
+    }
+  };
+  const createPost = async () => {
+    await uploadImage();
   };
 
   return (
@@ -50,7 +73,7 @@ export default function CreatePostScreen() {
         placeholder='What is on your mind'
       />
       <View style={styles.footer}>
-        <Button title='Share' onPress={() => {}} />
+        <Button title='Share' onPress={createPost} />
       </View>
     </View>
   );
