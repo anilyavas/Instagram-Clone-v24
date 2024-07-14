@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Button from '@/components/Button';
-import { cld } from '@/lib/cloudinary';
-import { upload } from 'cloudinary-react-native';
+import { uploadImage } from '@/lib/cloudinary';
 
 export default function CreatePostScreen() {
   const [input, setInput] = useState('');
@@ -28,26 +27,14 @@ export default function CreatePostScreen() {
       setImage(result.assets[0].uri);
     }
   };
-  const uploadImage = async () => {
+
+  const createPost = async () => {
     if (!image) {
       return;
-    } else {
-      const options = {
-        upload_preset: 'Default',
-        unsigned: true,
-      };
-      await upload(cld, {
-        file: image,
-        options: options,
-        callback: (error: any, response: any) => {
-          console.log(error);
-          console.log(response);
-        },
-      });
     }
-  };
-  const createPost = async () => {
-    await uploadImage();
+    const response = await uploadImage(image);
+
+    console.log('image id: ', response?.public_id);
   };
 
   return (
