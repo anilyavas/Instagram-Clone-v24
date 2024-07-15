@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import Button from '@/components/Button';
+import { supabase } from '@/lib/supabase';
 
 const ProfileScreen = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -45,7 +46,7 @@ const ProfileScreen = () => {
       />
       <View style={styles.footer}>
         <Button title='Update' onPress={() => {}} />
-        <Button title='Sign out' onPress={() => {}} />
+        <Button title='Sign out' onPress={() => supabase.auth.signOut()} />
       </View>
     </View>
   );
