@@ -3,10 +3,14 @@ import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Button from '@/components/Button';
 import { uploadImage } from '@/lib/cloudinary';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/providers/AuthProvider';
+import { router } from 'expo-router';
 
 export default function CreatePostScreen() {
-  const [input, setInput] = useState('');
+  const [caption, setCaption] = useState('');
   const [image, setImage] = useState<string | null>(null);
+  const { session } = useAuth();
 
   useEffect(() => {
     if (!image) {
@@ -35,6 +39,14 @@ export default function CreatePostScreen() {
     const response = await uploadImage(image);
 
     console.log('image id: ', response?.public_id);
+
+    const { data, error } = await supabase
+      .from('posts')
+      .insert([
+        { caption, image: response?.public_id, user_id: session?.user.id },
+      ])
+      .select();
+    router.push('/(tabs)');
   };
 
   return (
@@ -54,8 +66,8 @@ export default function CreatePostScreen() {
         Change
       </Text>
       <TextInput
-        value={input}
-        onChangeText={(item) => setInput(item)}
+        value={caption}
+        onChangeText={(item) => setCaption(item)}
         style={styles.input}
         placeholder='What is on your mind'
       />
