@@ -1,11 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  useWindowDimensions,
-} from 'react-native';
+import { StyleSheet, View, Text, useWindowDimensions } from 'react-native';
 import { AdvancedImage } from 'cloudinary-react-native';
 
 import { thumbnail } from '@cloudinary/url-gen/actions/resize';
@@ -34,7 +28,10 @@ export default function Post({ post }: { post: Post | any }) {
   const image = cld.image(post.image);
   image.resize(thumbnail().width(width).height(width));
 
-  const avatar = cld.image(post.user.avatar_url);
+  const avatar = cld.image(
+    post.user.avatar_url ||
+      'png-transparent-user-interface-design-computer-icons-default-stephen-salazar-graphy-user-interface-design-computer-wallpaper-sphere-thumbnail_kumxbc'
+  );
   avatar.resize(
     thumbnail().width(48).height(48).gravity(focusOn(FocusOn.face()))
   );
@@ -43,7 +40,7 @@ export default function Post({ post }: { post: Post | any }) {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <AdvancedImage cldImg={avatar} style={styles.userImage} />
-        <Text style={styles.userName}>{post.user.username}</Text>
+        <Text style={styles.userName}>{post.user.username || 'New user'}</Text>
       </View>
       <AdvancedImage cldImg={image} style={styles.advancedImg} />
       <View style={styles.buttonContainer}>
