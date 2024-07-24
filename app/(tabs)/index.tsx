@@ -3,12 +3,10 @@ import { StyleSheet, View, FlatList, Alert } from 'react-native';
 import post from '@/assets/data/posts.json';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/AuthProvider';
 
 export default function HomeScreen() {
   const [posts, setPosts] = useState();
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth();
 
   useEffect(() => {
     fetchPosts();

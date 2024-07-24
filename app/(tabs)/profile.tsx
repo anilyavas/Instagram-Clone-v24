@@ -1,12 +1,50 @@
-import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/providers/AuthProvider';
 
 const ProfileScreen = () => {
   const [image, setImage] = useState<string | null>(null);
   const [username, setUsername] = useState('');
+  const { user } = useAuth();
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const getProfile = async () => {
+    if (!user) {
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error) {
+      Alert.alert('Failed to fetch the profile');
+    }
+    setUsername(data.username);
+  };
+
+  const updateProfile = async () => {
+    if (!user) {
+      return;
+    }
+
+    const { data, error } = await supabase.from('profiles').update({
+      id: user.id,
+      username,
+    });
+
+    if (error) {
+      Alert.alert('Failed to update profile');
+    }
+  };
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -45,7 +83,7 @@ const ProfileScreen = () => {
         style={styles.username}
       />
       <View style={styles.footer}>
-        <Button title='Update' onPress={() => {}} />
+        <Button title='Update' onPress={updateProfile} />
         <Button title='Sign out' onPress={() => supabase.auth.signOut()} />
       </View>
     </View>
