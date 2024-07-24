@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
+import CustomTextInput from '@/components/CustomTextInput';
 
 const ProfileScreen = () => {
   const [image, setImage] = useState<string | null>(null);
   const [username, setUsername] = useState('');
+  const [bio, setBio] = useState('');
   const { user } = useAuth();
 
   useEffect(() => {
@@ -29,6 +31,7 @@ const ProfileScreen = () => {
       Alert.alert('Failed to fetch the profile');
     }
     setUsername(data.username);
+    setBio(data.bio);
   };
 
   const updateProfile = async () => {
@@ -39,6 +42,7 @@ const ProfileScreen = () => {
     const { data, error } = await supabase.from('profiles').update({
       id: user.id,
       username,
+      bio,
     });
 
     if (error) {
@@ -75,12 +79,17 @@ const ProfileScreen = () => {
       <Text onPress={pickImage} style={styles.buttonText}>
         Change
       </Text>
-      <Text style={styles.usernameTitle}>Username</Text>
-      <TextInput
+      <CustomTextInput
+        label='Username'
         placeholder='Username'
         value={username}
         onChangeText={setUsername}
-        style={styles.username}
+      />
+      <CustomTextInput
+        label='Bio'
+        placeholder='Bio'
+        value={bio}
+        onChangeText={setBio}
       />
       <View style={styles.footer}>
         <Button title='Update' onPress={updateProfile} />
@@ -109,17 +118,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 10,
   },
-  username: {
-    borderColor: 'grey',
-    borderWidth: 0.5,
-    padding: 10,
-  },
-  usernameTitle: {
-    marginBottom: 5,
-    marginLeft: 5,
-    color: 'grey',
-    fontWeight: 'semibold',
-  },
+
   footer: {
     marginTop: 'auto',
     gap: 5,
