@@ -1,10 +1,10 @@
-import { Text, TextInput, StyleSheet } from 'react-native';
+import { Text, TextInput, StyleSheet, View } from 'react-native';
 export default function CustomTextInput({ label, ...TextInputProps }) {
   return (
-    <>
+    <View>
       <Text style={styles.usernameTitle}>{label}</Text>
       <TextInput {...TextInputProps} style={styles.username} />
-    </>
+    </View>
   );
 }
 

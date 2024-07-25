@@ -79,18 +79,20 @@ const ProfileScreen = () => {
       <Text onPress={pickImage} style={styles.buttonText}>
         Change
       </Text>
-      <CustomTextInput
-        label='Username'
-        placeholder='Username'
-        value={username}
-        onChangeText={setUsername}
-      />
-      <CustomTextInput
-        label='Bio'
-        placeholder='Bio'
-        value={bio}
-        onChangeText={setBio}
-      />
+      <View style={styles.textinputContainer}>
+        <CustomTextInput
+          label='Username'
+          placeholder='Username'
+          value={username}
+          onChangeText={setUsername}
+        />
+        <CustomTextInput
+          label='Bio'
+          placeholder='Bio'
+          value={bio}
+          onChangeText={setBio}
+        />
+      </View>
       <View style={styles.footer}>
         <Button title='Update' onPress={updateProfile} />
         <Button title='Sign out' onPress={() => supabase.auth.signOut()} />
@@ -121,6 +123,9 @@ const styles = StyleSheet.create({
 
   footer: {
     marginTop: 'auto',
+    gap: 5,
+  },
+  textinputContainer: {
     gap: 5,
   },
 });
