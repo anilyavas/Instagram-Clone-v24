@@ -5,9 +5,13 @@ import Button from '@/components/Button';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/providers/AuthProvider';
 import CustomTextInput from '@/components/CustomTextInput';
+import { cld, uploadImage } from '@/lib/cloudinary';
+import { thumbnail } from '@cloudinary/url-gen/actions/resize';
+import { AdvancedImage } from 'cloudinary-react-native';
 
 const ProfileScreen = () => {
   const [image, setImage] = useState<string | null>(null);
+  const [remoteImage, setRemoteImage] = useState<string | null>(null);
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const { user } = useAuth();
@@ -32,6 +36,7 @@ const ProfileScreen = () => {
     }
     setUsername(data.username);
     setBio(data.bio);
+    setRemoteImage(data.avatar_url);
   };
 
   const updateProfile = async () => {
@@ -39,11 +44,21 @@ const ProfileScreen = () => {
       return;
     }
 
-    const { data, error } = await supabase.from('profiles').update({
+    const updatedProfile = {
       id: user.id,
       username,
       bio,
-    });
+    };
+
+    if (image) {
+      const response = await uploadImage(image);
+      console.log(response.public_id);
+      updatedProfile.avatar_url = response.public_id;
+    }
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updatedProfile);
 
     if (error) {
       Alert.alert('Failed to update profile');
@@ -64,6 +79,11 @@ const ProfileScreen = () => {
     }
   };
 
+  let remoteCloudinaryImage;
+  if (remoteImage) {
+    remoteCloudinaryImage = cld.image(remoteImage);
+    remoteCloudinaryImage.resize(thumbnail().width(300).height(300));
+  }
   return (
     <View style={styles.container}>
       {image ? (
@@ -73,6 +93,8 @@ const ProfileScreen = () => {
           }}
           style={styles.image}
         />
+      ) : remoteCloudinaryImage ? (
+        <AdvancedImage cldImg={remoteCloudinaryImage} style={styles.image} />
       ) : (
         <View style={styles.image} />
       )}
